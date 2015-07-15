@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<title>Welcome to Try-Extender!</title>
+<head>
+</head>
+<body>
+
+  <div id="placeholder"></div>
+  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script>
+    function get_checkbox(name, pre_checked){
+        if (pre_checked === true){
+            return "<label><input type='checkbox' name=" + name + "value=" + name + " disabled checked>" + name + "</label><br>";
+        }
+        else {
+            return "<label><input type='checkbox' name=" + name + "value=" + name + ">" + name + "</label><br>";
+        }
+    }
+
+    function write_list(platforms, debug){
+        ans = "";
+        for (var platform in platforms) {
+            if (debug === false){
+            ans += "<h4>" + platform + ": </h4>";
+            }
+            else{
+                ans += "<h4>" + platform + "-debug: </h4>";
+            }
+            for (var buildername in platforms[platform]){
+                if (buildername !== "tests"){
+                    var jobs=platforms[platform][buildername]
+                    if (jobs.length > 0){
+                        ans += "<h5>" + buildername + ":</h5>";
+                        for (var i = 0; i < jobs.length; i++){
+                            var downstream_job = jobs[i];
+                            ans += get_checkbox(downstream_job, false);
+                        }
+                    }
+                    else{
+                        ans += get_checkbox(buildername, true);
+                    }
+                }
+            }
+        }
+        return ans
+    }
+
+    $.getJSON('graph.json', function(data) {
+        var output="<form action=''>";
+        output += "<h3> Opt </h3>"
+        output += write_list(data.opt, false);
+        output += "<h3> Debug </h3>";
+        output += write_list(data.debug, true);
+        output+="</form>";
+        document.getElementById("placeholder").innerHTML=output;
+    });
+
+  </script>
+
+</body>
+</html>
