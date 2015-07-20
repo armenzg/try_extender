@@ -1,62 +1,105 @@
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
-<title>Welcome to Try-Extender!</title>
+<title>Try-Extender</title>
 <head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <div id="introduction">
+  <script>
+    function write_introduction_message(commit){
+        return "<h1> Please select bellow the jobs you want to add to commit " + commit + ": </h1>";
+      }
+      document.getElementById("introduction").innerHTML=write_introduction_message('ab9317560ecd');
+  </script>
+</div>
 </head>
 <body>
-
-  <div id="placeholder"></div>
-  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-  <script>
-    function get_checkbox(name, pre_checked){
-        if (pre_checked === true){
-            return "<label><input type='checkbox' name=" + name + "value=" + name + " disabled checked>" + name + "</label><br>";
+  <div class="left"> <div id="div1">
+    <script src="HTTP://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+    $(document).ready(function() {
+        function hide_jobs(section) {
+            $('.jobs-list ' + section).slideUp().removeClass('open');
         }
-        else {
-            return "<label><input type='checkbox' name=" + name + "value=" + name + ">" + name + "</label><br>";
-        }
-    }
 
-    function write_list(platforms, debug){
-        ans = "";
-        for (var platform in platforms) {
-            if (debug === false){
-            ans += "<h4>" + platform + ": </h4>";
+        function show_jobs(section){
+            $('.jobs-list ' + section).slideDown().addClass('open');
+        }
+
+        $('.upstream-buildername').click(function(e) {
+            var section = $(this).attr('href');
+            if($('.jobs-list ' + section).is('.open')) {
+                hide_jobs(section);
+            }
+            else {
+                show_jobs(section);
+            }
+        });
+      });
+
+</script>
+<script>
+      function get_checkbox(name, pre_checked){
+          if (pre_checked === true){
+              return "<label><input type='checkbox' name='" + encodeURIComponent(name) + "' value='" + encodeURIComponent(name) + "' disabled>" + name + "</label><br>";
+          }
+          else {
+              return "<label><input type='checkbox' name='" + encodeURIComponent(name) + "' value='" + encodeURIComponent(name) + "'>" + name + "</label><br>";
+          }
+      }
+
+      function write_builders_list(data){
+          var count = 0
+        ans = '<div class="jobs-list">';
+          for (var buildername in data){
+              count ++
+            if (buildername === "new_builds"){
+                ans += "<div class='section'>";
+                ans += '<a class="upstream-buildername" href="#new_builds"> New Build Jobs </a>';
+                ans += "<div id='new_builds' class='downstream-buildernames'>";
+                var new_jobs = data.new_builds;
+                for (var k = 0; k < new_jobs.length; k++) {
+                    var new_build = new_jobs[k];
+                    ans += get_checkbox(new_build, false);
+                }
+                ans += "</div></div>";
             }
             else{
-                ans += "<h4>" + platform + "-debug: </h4>";
-            }
-            for (var buildername in platforms[platform]){
-                if (buildername !== "tests"){
-                    var jobs=platforms[platform][buildername]
-                    if (jobs.length > 0){
-                        ans += "<h5>" + buildername + ":</h5>";
-                        for (var i = 0; i < jobs.length; i++){
-                            var downstream_job = jobs[i];
-                            ans += get_checkbox(downstream_job, false);
-                        }
-                    }
-                    else{
-                        ans += get_checkbox(buildername, true);
-                    }
+                ans += "<div class='section'>";
+                ans += '<a class="upstream-buildername" href="#' + count +'">' +  get_checkbox(buildername, true) + '</a>';
+                ans += "<div id='" + count +"' class='downstream-buildernames'>";
+                var possible = data[buildername]['possible'];
+                for (var j = 0; j < possible.length; j++) {
+                    var downstream_job = possible[j];
+                    ans += get_checkbox(downstream_job, false);
                 }
+
+                var existing = data[buildername]['existing'];
+                for (var i = 0; i < existing.length; i++) {
+                    var downstream_job = existing[i];
+                    ans += get_checkbox(downstream_job, true);
+                }
+                ans += "</div></div>";
             }
         }
+        ans += '</div>';
         return ans
     }
 
-    $.getJSON('graph.json', function(data) {
-        var output="<form action=''>";
-        output += "<h3> Opt </h3>"
-        output += write_list(data.opt, false);
-        output += "<h3> Debug </h3>";
-        output += write_list(data.debug, true);
+    $.getJSON('try_graph.json', function(data) {
+        var output= "<form action='some_file.py' method='POST'>";
+        output += write_builders_list(data);
+        output += "<input type='submit' value='Submit'>";
         output+="</form>";
-        document.getElementById("placeholder").innerHTML=output;
+        document.getElementById("div1").innerHTML=output;
     });
 
-  </script>
-
+    </script>
+    </div> </div>
+<div class="right">
+  <div id="div2">
+    <p> second column here </p>
+    </div> </div>
 </body>
 </html>

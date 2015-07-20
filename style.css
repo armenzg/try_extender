@@ -1,0 +1,49 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,600,700);
+
+h1 {
+  font-size: 20px;
+  line-height: 100%;
+  word-spacing: 4px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300
+}
+
+.left {
+    float: left;
+    width: 50%;
+}
+
+.right {
+    float: right;
+    width: 50%;
+}
+
+.jobs-list, .upstream-buildername,  downstream-buildernames, accordion-section {
+    box-sizing:border-box;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+}
+ 
+.jobs-list {
+    background: linear-gradient(to bottom, #F6F4EC, #D7D3C8);
+}
+ 
+.upstream-buildername {
+    width:100%;
+    padding:10px;
+    display:inline-block;
+    border-bottom:1px solid #333333;
+    background:#4D4E53;   
+    font-size:1.1em;
+    color:#D7D3C8;
+    text-decoration:none;
+}
+ 
+.upstream-buildername.active, .upstream-buildername:hover {
+    background:#6A7B86;
+}
+ 
+.downstream-buildernames {
+    display:none;
+    color:#4D4E53;   
+}
