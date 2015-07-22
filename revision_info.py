@@ -30,7 +30,7 @@ UPSTREAM_TO_DOWNSTREAM = generate_builders_relations_dictionary()
 def get_upstream_buildernames(repo_name):
     """Return every upstream buildername in a repo."""
     buildernames = filter_buildernames([repo_name],
-                                       ['hg bundle', 'pgo'],
+                                       ['hg bundle', 'Pogo'],
                                        list_builders())
     upstream_jobs = []
     for buildername in buildernames:
@@ -71,7 +71,12 @@ def jobs_per_revision(revision):
     processed_jobs["new_builds"].sort()
     return processed_jobs
 
-if __name__ == '__main__':
+
+def write_revision_graph(revision):
     with open('try_graph.json', 'w') as f:
-        graph = jobs_per_revision('ab9317560ecd')
+        graph = jobs_per_revision(revision)
         json.dump(graph, f, sort_keys=True, indent=4, separators=(',', ': '))
+
+
+if __name__ == '__main__':
+    write_revision_graph('ab9317560ecd')

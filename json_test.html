@@ -7,7 +7,7 @@
   <div id="introduction">
   <script>
     function write_introduction_message(commit){
-        return "<h1> Please select bellow the jobs you want to add to commit " + commit + ": </h1>";
+        return "<h1> Please select below the jobs you want to add to commit " + commit + ": </h1>";
       }
       document.getElementById("introduction").innerHTML=write_introduction_message('ab9317560ecd');
   </script>
@@ -56,7 +56,7 @@
               count ++
             if (buildername === "new_builds"){
                 ans += "<div class='section'>";
-                ans += '<a class="upstream-buildername" href="#new_builds"> New Build Jobs </a>';
+                ans += '<a class="upstream-buildername" href="#new_builds"> Missing Build Jobs </a>';
                 ans += "<div id='new_builds' class='downstream-buildernames'>";
                 var new_jobs = data.new_builds;
                 for (var k = 0; k < new_jobs.length; k++) {
@@ -90,7 +90,7 @@
     $.getJSON('try_graph.json', function(data) {
         var output= "<form action='some_file.py' method='POST'>";
         output += write_builders_list(data);
-        output += "<input type='submit' value='Submit'>";
+        output += "<input type='submit' value='Trigger Jobs'>";
         output+="</form>";
         document.getElementById("div1").innerHTML=output;
     });

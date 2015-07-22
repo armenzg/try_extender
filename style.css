@@ -10,12 +10,14 @@ h1 {
 
 .left {
     float: left;
-    width: 50%;
+    width: 60%;
 }
 
 .right {
     float: right;
-    width: 50%;
+    width: 35%;
+    font-family: 'Open Sans', sans-serif;
+    text-align: left;
 }
 
 .jobs-list, .upstream-buildername,  downstream-buildernames, accordion-section {
@@ -45,5 +47,6 @@ h1 {
  
 .downstream-buildernames {
     display:none;
-    color:#4D4E53;   
+    color:#4D4E53;
+    line-height: 150%;
 }
