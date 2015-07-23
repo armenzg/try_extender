@@ -79,4 +79,4 @@ def write_revision_graph(revision):
 
 
 if __name__ == '__main__':
-    write_revision_graph('ab9317560ecd')
+    write_revision_graph('b629d766f590')
