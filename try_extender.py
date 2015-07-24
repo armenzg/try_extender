@@ -4,6 +4,8 @@ from flask import Flask, request, jsonify, redirect
 from urllib import unquote
 
 from mozci.mozci import trigger_job
+from mozci import query_jobs
+from mozci.sources import buildjson
 from mozci.sources.allthethings import list_builders
 from mozci.utils.transfer import MEMORY_SAVING_MODE
 from revision_info import jobs_per_revision
@@ -25,13 +27,22 @@ def process_data():
 
     for buildername in buildernames:
         trigger_job(buildername=buildername, revision=commit, dry_run=True)
+
+    buildjson.BUILDS_CACHE = {}
+    query_jobs.JOBS_CACHE = {}
+
     return jsonify(request.form)
 
 @app.route("/backend/get_json")
 def get_json():
     commit = request.values['commit']
     assert all(c in string.hexdigits for c in commit)
-    return jsonify(jobs_per_revision(commit))
+    ret = jobs_per_revision(commit)
+
+    buildjson.BUILDS_CACHE = {}
+    query_jobs.JOBS_CACHE = {}
+
+    return jsonify(ret)
 
 @app.route("/")
 def index():
