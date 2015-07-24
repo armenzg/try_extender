@@ -9,7 +9,7 @@ from mozci.platforms import is_downstream, determine_upstream_builder, filter_bu
 
 
 LOG = logging.getLogger()
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 RESULTS = ['success', 'warning', 'failure', 'skipped', 'exception', 'retry', 'cancelled',
            'pending', 'running', 'coalesced', 'unknown']
@@ -24,7 +24,13 @@ def generate_builders_relations_dictionary():
             relations[determine_upstream_builder(buildername)].append(buildername)
     return relations
 
-UPSTREAM_TO_DOWNSTREAM = generate_builders_relations_dictionary()
+UPSTREAM_TO_DOWNSTREAM = {}
+
+
+def load_relations():
+    global UPSTREAM_TO_DOWNSTREAM
+    if UPSTREAM_TO_DOWNSTREAM == {}:
+        UPSTREAM_TO_DOWNSTREAM = generate_builders_relations_dictionary()
 
 
 def get_upstream_buildernames(repo_name):
@@ -41,6 +47,7 @@ def get_upstream_buildernames(repo_name):
 
 def jobs_per_revision(revision):
     """Get all jobs for a revision."""
+    load_relations()
     all_jobs = BuildApi()._get_all_jobs('try', revision)
     processed_jobs = {}
     for job in all_jobs:

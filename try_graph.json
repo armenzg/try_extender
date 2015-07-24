@@ -120,6 +120,7 @@
             "Android 4.3 armv7 API 11+ try debug test mochitest-7",
             "Android 4.3 armv7 API 11+ try debug test mochitest-8",
             "Android 4.3 armv7 API 11+ try debug test mochitest-9",
+            "Android 4.3 armv7 API 11+ try debug test mochitest-9",
             "Android 4.3 armv7 API 11+ try debug test mochitest-chrome",
             "Android 4.3 armv7 API 11+ try debug test mochitest-gl-1",
             "Android 4.3 armv7 API 11+ try debug test mochitest-gl-2",
@@ -381,6 +382,7 @@
             "Ubuntu ASAN VM 12.04 x64 try opt test mochitest-gl",
             "Ubuntu ASAN VM 12.04 x64 try opt test mochitest-jetpack",
             "Ubuntu ASAN VM 12.04 x64 try opt test mochitest-other",
+            "Ubuntu ASAN VM 12.04 x64 try opt test mochitest-other",
             "Ubuntu ASAN VM 12.04 x64 try opt test mochitest-push"
         ],
         "possible": [
@@ -625,14 +627,9 @@
         ]
     },
     "OS X 10.7 try build": {
-        "existing": [],
-        "possible": [
-            "Rev4 MacOSX Snow Leopard 10.6 try opt test cpp_gtest",
+        "existing": [
             "Rev4 MacOSX Snow Leopard 10.6 try opt test cppunit",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test crashtest",
-            "Rev4 MacOSX Snow Leopard 10.6 try opt test jetpack",
-            "Rev4 MacOSX Snow Leopard 10.6 try opt test jittest",
-            "Rev4 MacOSX Snow Leopard 10.6 try opt test jsreftest",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-1",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-2",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-3",
@@ -648,7 +645,13 @@
             "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-gl",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-jetpack",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-other",
-            "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-push",
+            "Rev4 MacOSX Snow Leopard 10.6 try opt test mochitest-push"
+        ],
+        "possible": [
+            "Rev4 MacOSX Snow Leopard 10.6 try opt test cpp_gtest",
+            "Rev4 MacOSX Snow Leopard 10.6 try opt test jetpack",
+            "Rev4 MacOSX Snow Leopard 10.6 try opt test jittest",
+            "Rev4 MacOSX Snow Leopard 10.6 try opt test jsreftest",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test reftest",
             "Rev4 MacOSX Snow Leopard 10.6 try opt test xpcshell",
             "Rev5 MacOSX Mountain Lion 10.8 try opt test cpp_gtest",
@@ -719,15 +722,9 @@
         "possible": []
     },
     "WINNT 5.2 try build": {
-        "existing": [],
-        "possible": [
-            "Windows 7 32-bit try opt test cpp_gtest",
+        "existing": [
             "Windows 7 32-bit try opt test cppunit",
             "Windows 7 32-bit try opt test crashtest",
-            "Windows 7 32-bit try opt test jetpack",
-            "Windows 7 32-bit try opt test jittest",
-            "Windows 7 32-bit try opt test jsreftest",
-            "Windows 7 32-bit try opt test marionette",
             "Windows 7 32-bit try opt test mochitest-1",
             "Windows 7 32-bit try opt test mochitest-2",
             "Windows 7 32-bit try opt test mochitest-3",
@@ -744,6 +741,28 @@
             "Windows 7 32-bit try opt test mochitest-jetpack",
             "Windows 7 32-bit try opt test mochitest-other",
             "Windows 7 32-bit try opt test mochitest-push",
+            "Windows XP 32-bit try opt test cppunit",
+            "Windows XP 32-bit try opt test crashtest",
+            "Windows XP 32-bit try opt test mochitest-1",
+            "Windows XP 32-bit try opt test mochitest-2",
+            "Windows XP 32-bit try opt test mochitest-3",
+            "Windows XP 32-bit try opt test mochitest-4",
+            "Windows XP 32-bit try opt test mochitest-5",
+            "Windows XP 32-bit try opt test mochitest-browser-chrome-1",
+            "Windows XP 32-bit try opt test mochitest-browser-chrome-2",
+            "Windows XP 32-bit try opt test mochitest-browser-chrome-3",
+            "Windows XP 32-bit try opt test mochitest-devtools-chrome",
+            "Windows XP 32-bit try opt test mochitest-gl",
+            "Windows XP 32-bit try opt test mochitest-jetpack",
+            "Windows XP 32-bit try opt test mochitest-other",
+            "Windows XP 32-bit try opt test mochitest-push"
+        ],
+        "possible": [
+            "Windows 7 32-bit try opt test cpp_gtest",
+            "Windows 7 32-bit try opt test jetpack",
+            "Windows 7 32-bit try opt test jittest",
+            "Windows 7 32-bit try opt test jsreftest",
+            "Windows 7 32-bit try opt test marionette",
             "Windows 7 32-bit try opt test reftest",
             "Windows 7 32-bit try opt test reftest-no-accel",
             "Windows 7 32-bit try opt test web-platform-tests-1",
@@ -761,25 +780,10 @@
             "Windows 7 32-bit try talos tp5o",
             "Windows 7 32-bit try talos xperf",
             "Windows XP 32-bit try opt test cpp_gtest",
-            "Windows XP 32-bit try opt test cppunit",
-            "Windows XP 32-bit try opt test crashtest",
             "Windows XP 32-bit try opt test jetpack",
             "Windows XP 32-bit try opt test jittest",
             "Windows XP 32-bit try opt test jsreftest",
             "Windows XP 32-bit try opt test marionette",
-            "Windows XP 32-bit try opt test mochitest-1",
-            "Windows XP 32-bit try opt test mochitest-2",
-            "Windows XP 32-bit try opt test mochitest-3",
-            "Windows XP 32-bit try opt test mochitest-4",
-            "Windows XP 32-bit try opt test mochitest-5",
-            "Windows XP 32-bit try opt test mochitest-browser-chrome-1",
-            "Windows XP 32-bit try opt test mochitest-browser-chrome-2",
-            "Windows XP 32-bit try opt test mochitest-browser-chrome-3",
-            "Windows XP 32-bit try opt test mochitest-devtools-chrome",
-            "Windows XP 32-bit try opt test mochitest-gl",
-            "Windows XP 32-bit try opt test mochitest-jetpack",
-            "Windows XP 32-bit try opt test mochitest-other",
-            "Windows XP 32-bit try opt test mochitest-push",
             "Windows XP 32-bit try opt test reftest",
             "Windows XP 32-bit try opt test web-platform-tests-1",
             "Windows XP 32-bit try opt test web-platform-tests-2",
@@ -804,6 +808,7 @@
             "Windows 7 32-bit try debug test mochitest-4",
             "Windows 7 32-bit try debug test mochitest-5",
             "Windows 7 32-bit try debug test mochitest-browser-chrome-1",
+            "Windows 7 32-bit try debug test mochitest-browser-chrome-2",
             "Windows 7 32-bit try debug test mochitest-browser-chrome-2",
             "Windows 7 32-bit try debug test mochitest-browser-chrome-3",
             "Windows 7 32-bit try debug test mochitest-devtools-chrome-1",
@@ -873,6 +878,7 @@
             "Windows 8 64-bit try opt test crashtest",
             "Windows 8 64-bit try opt test mochitest-1",
             "Windows 8 64-bit try opt test mochitest-2",
+            "Windows 8 64-bit try opt test mochitest-2",
             "Windows 8 64-bit try opt test mochitest-3",
             "Windows 8 64-bit try opt test mochitest-4",
             "Windows 8 64-bit try opt test mochitest-5",
@@ -912,20 +918,15 @@
         ]
     },
     "WINNT 6.1 x86-64 try leak test build": {
-        "existing": [],
-        "possible": [
-            "Windows 8 64-bit try debug test cpp_gtest",
+        "existing": [
             "Windows 8 64-bit try debug test cppunit",
             "Windows 8 64-bit try debug test crashtest",
-            "Windows 8 64-bit try debug test jetpack",
-            "Windows 8 64-bit try debug test jittest",
-            "Windows 8 64-bit try debug test jsreftest",
-            "Windows 8 64-bit try debug test marionette",
             "Windows 8 64-bit try debug test mochitest-1",
             "Windows 8 64-bit try debug test mochitest-2",
             "Windows 8 64-bit try debug test mochitest-3",
             "Windows 8 64-bit try debug test mochitest-4",
             "Windows 8 64-bit try debug test mochitest-5",
+            "Windows 8 64-bit try debug test mochitest-browser-chrome-1",
             "Windows 8 64-bit try debug test mochitest-browser-chrome-1",
             "Windows 8 64-bit try debug test mochitest-browser-chrome-2",
             "Windows 8 64-bit try debug test mochitest-browser-chrome-3",
@@ -936,7 +937,14 @@
             "Windows 8 64-bit try debug test mochitest-gl",
             "Windows 8 64-bit try debug test mochitest-jetpack",
             "Windows 8 64-bit try debug test mochitest-other",
-            "Windows 8 64-bit try debug test mochitest-push",
+            "Windows 8 64-bit try debug test mochitest-push"
+        ],
+        "possible": [
+            "Windows 8 64-bit try debug test cpp_gtest",
+            "Windows 8 64-bit try debug test jetpack",
+            "Windows 8 64-bit try debug test jittest",
+            "Windows 8 64-bit try debug test jsreftest",
+            "Windows 8 64-bit try debug test marionette",
             "Windows 8 64-bit try debug test reftest",
             "Windows 8 64-bit try debug test web-platform-tests-1",
             "Windows 8 64-bit try debug test web-platform-tests-2",
@@ -955,8 +963,7 @@
         "possible": []
     },
     "b2g_try_emulator-debug_dep": {
-        "existing": [],
-        "possible": [
+        "existing": [
             "b2g_emulator_vm try debug test cppunit",
             "b2g_emulator_vm try debug test mochitest-debug-1",
             "b2g_emulator_vm try debug test mochitest-debug-10",
@@ -976,25 +983,23 @@
             "b2g_emulator_vm try debug test mochitest-debug-23",
             "b2g_emulator_vm try debug test mochitest-debug-24",
             "b2g_emulator_vm try debug test mochitest-debug-25",
+            "b2g_emulator_vm try debug test mochitest-debug-25",
             "b2g_emulator_vm try debug test mochitest-debug-3",
             "b2g_emulator_vm try debug test mochitest-debug-4",
             "b2g_emulator_vm try debug test mochitest-debug-5",
             "b2g_emulator_vm try debug test mochitest-debug-6",
             "b2g_emulator_vm try debug test mochitest-debug-7",
             "b2g_emulator_vm try debug test mochitest-debug-8",
-            "b2g_emulator_vm try debug test mochitest-debug-9",
+            "b2g_emulator_vm try debug test mochitest-debug-9"
+        ],
+        "possible": [
             "b2g_emulator_vm try debug test xpcshell-1",
             "b2g_emulator_vm try debug test xpcshell-2"
         ]
     },
     "b2g_try_emulator_dep": {
-        "existing": [],
-        "possible": [
+        "existing": [
             "b2g_emulator_vm try opt test cppunit",
-            "b2g_emulator_vm try opt test crashtest-1",
-            "b2g_emulator_vm try opt test crashtest-2",
-            "b2g_emulator_vm try opt test crashtest-3",
-            "b2g_emulator_vm try opt test marionette-webapi",
             "b2g_emulator_vm try opt test mochitest-1",
             "b2g_emulator_vm try opt test mochitest-2",
             "b2g_emulator_vm try opt test mochitest-3",
@@ -1004,7 +1009,14 @@
             "b2g_emulator_vm try opt test mochitest-7",
             "b2g_emulator_vm try opt test mochitest-8",
             "b2g_emulator_vm try opt test mochitest-9",
-            "b2g_emulator_vm try opt test mochitest-chrome",
+            "b2g_emulator_vm try opt test mochitest-9",
+            "b2g_emulator_vm try opt test mochitest-chrome"
+        ],
+        "possible": [
+            "b2g_emulator_vm try opt test crashtest-1",
+            "b2g_emulator_vm try opt test crashtest-2",
+            "b2g_emulator_vm try opt test crashtest-3",
+            "b2g_emulator_vm try opt test marionette-webapi",
             "b2g_emulator_vm try opt test reftest-1",
             "b2g_emulator_vm try opt test reftest-10",
             "b2g_emulator_vm try opt test reftest-11",

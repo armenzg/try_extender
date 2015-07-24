@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<title>Try-Extender</title>
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="introduction">
+    <script>
+      function get_commit(){
+          var query_string_values = window.location.search.substring(1).split('&');
+          for (var i = 0; i < query_string_values.length; i++){
+              var commit = query_string_values[i].split('=');
+              if (commit[0] == 'commit'){
+                  return commit[1];
+              }
+          }
+      }
+      function write_introduction_message(commit){
+
+          return "<h1> Please select below the jobs you want to add to " + commit + ": </h1>";
+      }
+      document.getElementById("introduction").innerHTML=write_introduction_message(get_commit());
+    </script>
+  </div>
+
+  <div class="left"> <div id="div1">
+      <script src="HTTP://code.jquery.com/jquery-1.7.1.min.js"></script>
+      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+      <script>
+        function get_checkbox(name, pre_checked){
+            if (pre_checked === true){
+                return "<label><input type='checkbox' name='" + encodeURIComponent(name) + "' value='" + encodeURIComponent(name) + "' disabled>" + name + "</label><br>";
+            }
+            else {
+                return "<label><input type='checkbox' name='" + encodeURIComponent(name) + "' value='" + encodeURIComponent(name) + "'>" + name + "</label><br>";
+            }
+        }
+
+        function write_builders_list(data){
+            var count = 0
+            ans = '<div class="jobs-list">';
+            for (var buildername in data){
+                count++;
+
+                if (buildername === "new_builds"){
+                    ans += "<div class='section'>";
+                    ans += '<a class="upstream-buildername" href="#new_builds"> Missing Build Jobs </a>';
+                    ans += "<div id='new_builds' class='downstream-buildernames'>";
+                    var new_jobs = data.new_builds;
+                    for (var k = 0; k < new_jobs.length; k++) {
+                        var new_build = new_jobs[k];
+                        ans += get_checkbox(new_build, false);
+                    }
+                    ans += "</div></div>";
+                }
+                else{
+                    ans += "<div class='section'>";
+                    ans += '<a class="upstream-buildername" href="#' + count +'">' +  buildername + '</a>';
+                    ans += "<div id='" + count +"' class='downstream-buildernames'>";
+                    var possible = data[buildername]['possible'];
+                    for (var j = 0; j < possible.length; j++) {
+                        var downstream_job = possible[j];
+                        ans += get_checkbox(downstream_job, false);
+                    }
+
+                    var existing = data[buildername]['existing'];
+                    for (var i = 0; i < existing.length; i++) {
+                        var downstream_job = existing[i];
+                        ans += get_checkbox(downstream_job, true);
+                    }
+                    ans += "</div></div>";
+                }
+            }
+            ans += '</div>';
+            return ans;
+        }
+
+        $.getJSON('/backend/get_json' + window.location.search, function(data) {
+            var output= "<form action='/backend/process_data' method='POST'>";
+            output += write_builders_list(data);
+            output += "<input type='hidden' name='commit' value='" + get_commit() + "'>"
+            output += "<input type='submit' value='Trigger Jobs'>";
+            output +="</form>";
+            document.getElementById("div1").innerHTML=output;
+
+            function hide_jobs(section) {
+                $('.jobs-list ' + section).slideUp().removeClass('open');
+            }
+
+            function show_jobs(section){
+                $('.jobs-list ' + section).slideDown().addClass('open');
+            }
+
+            $('.upstream-buildername').click(function(e) {
+                var section = $(this).attr('href');
+                if($('.jobs-list ' + section).is('.open')) {
+                    hide_jobs(section);
+                }
+                else {
+                    show_jobs(section);
+                }
+                e.preventDefault();
+            });
+        });
+      </script>
+  </div> </div>
+  <div class="right">
+    <div id="div2">
+      <p> TODO: add a general explanation about the service here</p>
+  </div> </div>
+  <script src="https://login.persona.org/include.js"></script>
+</body>
+</html>
