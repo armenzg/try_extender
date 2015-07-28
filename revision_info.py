@@ -9,7 +9,7 @@ from mozci.platforms import is_downstream, determine_upstream_builder, filter_bu
 
 
 LOG = logging.getLogger()
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 RESULTS = ['success', 'warning', 'failure', 'skipped', 'exception', 'retry', 'cancelled',
            'pending', 'running', 'coalesced', 'unknown']

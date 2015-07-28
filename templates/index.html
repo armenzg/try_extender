@@ -1,31 +1,19 @@
-<!DOCTYPE html>
-<html>
-<meta charset="UTF-8">
-<title>Try-Extender</title>
-<head>
-  <link rel="stylesheet" type="text/css" href="style.css">
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.email %}
+    <a href="#" class="persona-button dark" id="signout"><span>Sign out ({{ session.email }})</span></a>
+    {% else %}
+    <a href="#" class="persona-button dark" id="signin"><span>Sign in</span></a>
+    {% endif %}
+    <div id="introduction">
 
-</head>
-<body>
-  <div id="introduction">
-    <script>
-      function get_commit(){
-          var query_string_values = window.location.search.substring(1).split('&');
-          for (var i = 0; i < query_string_values.length; i++){
-              var commit = query_string_values[i].split('=');
-              if (commit[0] == 'commit'){
-                  return commit[1];
-              }
-          }
-      }
-      function write_introduction_message(commit){
-
-          return "<h1> Please select below the jobs you want to add to " + commit + ": </h1>";
-      }
-      document.getElementById("introduction").innerHTML=write_introduction_message(get_commit());
-    </script>
-
-  </div>
+      {% if request.args.commit %}
+      <h1> Please select below the jobs you want to add to {{request.args.commit}}: </h1>
+      {% else %}
+      <h1> Please add a commit </h1>
+      <p> Currently, you must do ?commit={12-character commit hash} in the URL. </br> TODO: create a better way to select a commit </p>
+      {% endif %}
+    </div>
 
   <div class="left"> <div id="div1">
       <script src="HTTP://code.jquery.com/jquery-1.7.1.min.js"></script>
@@ -83,7 +71,7 @@
         $.getJSON('/backend/get_json' + window.location.search, function(data) {
             var output= "<form action='/backend/process_data' method='POST'>";
             output += write_builders_list(data);
-            output += "<input type='hidden' name='commit' value='" + get_commit() + "'>"
+            output += "<input type='hidden' name='commit' value='{{request.args.commit}}'>"
             output += "<input type='submit' value='Trigger Jobs'>";
             output +="</form>";
             document.getElementById("div1").innerHTML=output;
@@ -107,34 +95,44 @@
                 e.preventDefault();
             });
         });
+      </script>
+  </div> </div>
+  <div class="right">
+    <div id="div2">
 
-        // Code from https://github.com/mozilla/browserid-cookbook/
-        var App = {
-            init: function(){
-                function verifyAssertion(assertion) {
-                    $.post('/auth/login', {assertion: assertion}, function (data, textStatus) {
-                        if ('success' == textStatus) {
-                            window.location.reload();
-                        } else {
-                            navigator.id.logout();
-                        }
-                    }, 'json');
-                }
+      <p> TODO: add a general explanation about the service here</p>
 
-                function signoutUser() {
-                    $.post('/auth/logout', {}, function (data) {
-                        window.location.reload();
-                    });
-                }
+  </div> </div>
 
-                navigator.id.watch( {
-                    if (session.email){
-                        loggedInUser: session.email;
-                    }
-                    else{
-                        loggedInUser: null;
-                    }
 
+{% endblock %}
+{% block footer %}
+    <script type="text/javascript">
+    // Code from https://github.com/mozilla/browserid-cookbook
+    var App = {
+        init: function(){
+          function verifyAssertion(assertion) {
+            $.post('/auth/login', {assertion: assertion}, function (data, textStatus) {
+              if ('success' == textStatus) {
+                window.location.reload();
+              } else {
+                navigator.id.logout();
+              }
+            }, 'json');
+          }
+
+          function signoutUser() {
+            $.post('/auth/logout', {}, function (data) {
+              window.location.reload();
+            });
+          }
+
+          navigator.id.watch( {
+            {% if session.email %}
+              loggedInUser: '{{ session.email }}',
+            {% else %}
+              loggedInUser: null,
+            {% endif %}
               onlogin: verifyAssertion,
               onlogout: signoutUser
           });
@@ -153,14 +151,5 @@
       $(document).ready(function(){
         App.init();
       });
-      </script>
-  </div> </div>
-  <div class="right">
-    <div id="div2">
-
-      <p> TODO: add a general explanation about the service here</p>
-
-  </div> </div>
-
-</body>
-</html>
+    </script>
+{% endblock %}

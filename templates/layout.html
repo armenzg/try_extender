@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <title>Try-Extender</title>
+  <head>
+    <meta charset ="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='persona-buttons.css') }}">
+  </head>
+  <body>
+    {% block body %}{% endblock %}
+    {% block footer %}{% endblock %}
+  </body>
+</html>
