@@ -14,13 +14,13 @@ from revision_info import jobs_per_revision
 
 # Configuring app
 app = Flask(__name__, static_folder='static', static_url_path='/static')
-app.debug = True
 app.secret_key = os.environ.get('TE_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
 
 MEMORY_SAVING_MODE = True
-USERS = ['alicescarpa@gmail.com', 'armenzg@mozilla.com']
-PORT = os.environ.get('PORT', 8080)
+USERS = ['alicescarpa@gmail.com', 'armenzg@mozilla.com', 'erahm@mozilla.com']
+PORT = int(os.environ.get('PORT', 8080))
+DOMAIN = os.environ.get('HEROKU_URL', 'localhost:%d' % PORT)
 
 
 @app.route("/backend/process_data", methods=['POST'])
@@ -40,7 +40,7 @@ def process_data():
         assert buildername in list_builders()
 
     for buildername in buildernames:
-        trigger_job(buildername=buildername, revision=commit, dry_run=True)
+        trigger_job(buildername=buildername, revision=commit, dry_run=False)
 
     buildjson.BUILDS_CACHE = {}
     query_jobs.JOBS_CACHE = {}
@@ -75,7 +75,7 @@ def login():
         abort(400)
 
     assertion_info = {'assertion': request.form['assertion'],
-                      'audience': 'localhost:%d' % PORT}  # window.location.host
+                      'audience': request.url_root }  # window.location.host
     resp = requests.post('https://verifier.login.persona.org/verify',
                          data=assertion_info, verify=True)
 
