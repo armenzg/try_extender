@@ -12,10 +12,16 @@ from mozci.sources.allthethings import list_builders
 from mozci.utils.transfer import MEMORY_SAVING_MODE
 from revision_info import jobs_per_revision
 
+# Configuring app
 app = Flask(__name__, static_folder='static', static_url_path='/static')
-MEMORY_SAVING_MODE = True
 app.debug = True
+app.secret_key = os.environ.get('TE_KEY')
+app.config['SESSION_TYPE'] = 'filesystem'
+
+MEMORY_SAVING_MODE = True
 USERS = ['alicescarpa@gmail.com', 'armenzg@mozilla.com']
+PORT = os.environ.get('PORT', 8080)
+
 
 @app.route("/backend/process_data", methods=['POST'])
 def process_data():
@@ -69,7 +75,7 @@ def login():
         abort(400)
 
     assertion_info = {'assertion': request.form['assertion'],
-                      'audience': 'localhost:8080'}  # window.location.host
+                      'audience': 'localhost:%d' % PORT}  # window.location.host
     resp = requests.post('https://verifier.login.persona.org/verify',
                          data=assertion_info, verify=True)
 
@@ -90,6 +96,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.secret_key = os.environ.get('TE_KEY')
-    app.config['SESSION_TYPE'] = 'filesystem'
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=PORT)
