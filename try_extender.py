@@ -18,7 +18,7 @@ app.secret_key = os.environ.get('TE_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
 
 MEMORY_SAVING_MODE = True
-USERS = ['alicescarpa@gmail.com', 'armenzg@mozilla.com', 'erahm@mozilla.com']
+USERS = ['alicescarpa@gmail.com', 'armenzg@mozilla.com', 'jmaher@mozilla.com']
 PORT = int(os.environ.get('PORT', 8080))
 DOMAIN = os.environ.get('HEROKU_URL', 'localhost:%d' % PORT)
 

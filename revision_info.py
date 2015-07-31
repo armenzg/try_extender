@@ -1,11 +1,13 @@
 """Create a graph with information about the existing jobs for a revision."""
 import collections
-import logging
 import json
+import logging
+import requests
 
 from mozci.query_jobs import BuildApi
 from mozci.sources.allthethings import list_builders
 from mozci.platforms import is_downstream, determine_upstream_builder, filter_buildernames
+from mozci.utils.authentication import get_credentials
 
 
 LOG = logging.getLogger()
@@ -24,19 +26,19 @@ def generate_builders_relations_dictionary():
             relations[determine_upstream_builder(buildername)].append(buildername)
     return relations
 
-UPSTREAM_TO_DOWNSTREAM = {}
+UPSTREAM_TO_DOWNSTREAM = None
 
 
 def load_relations():
     global UPSTREAM_TO_DOWNSTREAM
-    if UPSTREAM_TO_DOWNSTREAM == {}:
+    if UPSTREAM_TO_DOWNSTREAM is None:
         UPSTREAM_TO_DOWNSTREAM = generate_builders_relations_dictionary()
 
 
 def get_upstream_buildernames(repo_name):
     """Return every upstream buildername in a repo."""
     buildernames = filter_buildernames([repo_name],
-                                       ['hg bundle', 'Pogo'],
+                                       ['hg bundle', 'pgo'],
                                        list_builders())
     upstream_jobs = []
     for buildername in buildernames:
@@ -45,13 +47,33 @@ def get_upstream_buildernames(repo_name):
     return upstream_jobs
 
 
+def get_jobs(rev):
+    url = "https://secure.pub.build.mozilla.org/buildapi/self-serve/try/rev/%s?format=json" % rev
+    LOG.debug("About to fetch %s" % url)
+
+    req = requests.get(url, auth=get_credentials())
+
+    if not req.status_code in [200]:
+        return
+
+    data = req.json()
+    jobs = []
+    for build in data:
+        jobs.append((build['buildername'], build['status']))
+    return jobs
+
+
 def jobs_per_revision(revision):
     """Get all jobs for a revision."""
     load_relations()
-    all_jobs = BuildApi()._get_all_jobs('try', revision)
+    all_jobs = get_jobs(revision)
+
+    if all_jobs is None:
+        return
+
     processed_jobs = {}
     for job in all_jobs:
-        buildername = job['buildername']
+        buildername = job[0]
 
         if is_downstream(buildername):
             build_job = determine_upstream_builder(buildername)
