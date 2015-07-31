@@ -53,8 +53,8 @@ def get_jobs(rev):
 
     req = requests.get(url, auth=get_credentials())
 
-    if not req.status_code in [200]:
-        return
+    if req.status_code not in [200]:
+        raise Exception
 
     data = req.json()
     jobs = []

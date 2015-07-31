@@ -1,3 +1,4 @@
+import logging
 import os
 import string
 import requests
@@ -9,15 +10,19 @@ from mozci.mozci import trigger_job
 from mozci import query_jobs
 from mozci.sources import buildjson
 from mozci.sources.allthethings import list_builders
-from mozci.utils.transfer import MEMORY_SAVING_MODE
+from mozci.utils import transfer
 from revision_info import jobs_per_revision
+
+
+LOG = logging.getLogger()
+logging.basicConfig(level=logging.INFO)
 
 # Configuring app
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = os.environ.get('TE_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
 
-MEMORY_SAVING_MODE = True
+transfer.MEMORY_SAVING_MODE = True
 USERS = ['alicescarpa@gmail.com', 'armenzg@mozilla.com', 'jmaher@mozilla.com']
 PORT = int(os.environ.get('PORT', 8080))
 DOMAIN = os.environ.get('HEROKU_URL', 'localhost:%d' % PORT)
@@ -31,6 +36,7 @@ def process_data():
             abort(403, 'Access denied! Please log in first.')
         else:
             abort(403, 'Access denied! You are not in the list of beta users.')
+
     buildernames = map(urllib.unquote, request.form.keys())
     buildernames.remove('commit')
     commit = request.form['commit']
@@ -55,12 +61,14 @@ def get_json():
         return redirect('/')
 
     assert all(c in string.hexdigits for c in commit)
+
     try:
         ret = jobs_per_revision(commit)
         buildjson.BUILDS_CACHE = {}
         query_jobs.JOBS_CACHE = {}
         return jsonify(ret)
     except:
+        print 'sending bad commit message'
         return jsonify({'Message': 'commit not found'})
 
 
@@ -96,5 +104,6 @@ def logout():
     return redirect('/')
 
 
+# For running locally without gunicorn
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=PORT)

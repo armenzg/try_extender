@@ -1,18 +1,82 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,600,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
 
 h1 {
   font-size: 20px;
   line-height: 100%;
   word-spacing: 4px;
   font-family: 'Open Sans', sans-serif;
-  font-weight: 300
+  font-weight: 300;
+}
+
+.top_bar h1 {
+    display: inline;
+    font-weight: 600;
+    vertical-align: middle;
+}
+.top_bar {
+    background:#4D4E53;
+    flex-basis: auto;
+    margin-top: 0;
+    padding:20px;
+    padding-right: 40px;
+    color:#D7D3C8;
+}
+
+.persona-container {
+    display: inline-block;
+    float: right;
+}
+
+.introduction{
+    padding-bottom: 15px;
+}
+
+.button {
+    margin-top: 16px;
+}
+/* Copied from official Mozilla buttons */
+.button,.button:link,.button:visited{
+	display:inline-block;
+	border-radius:.25em;
+	box-shadow:0 1px 0 0 rgba(0,0,0,0.2),inset 0 -1px 0 0 rgba(0,0,0,0.3);
+	background-color:#43a6e2;
+	background-color:#277ac1;
+	background-repeat:repeat-x;
+	background-image:linear-gradient(to bottom,#43a6e2,#277ac1);
+	color:#fff;
+	text-align:center;
+	font-size:14px;
+	font-size:1rem;
+	padding:6px 12px;
+	line-height:1.1;
+	text-decoration:none;
+        font-weight: 400;
+	border:0;
+	text-shadow:0 1px 0 rgba(0,0,0,0.25);
+	transition:all linear .25s
 }
 
 .left {
     float: left;
-    width: 60%;
+    width: 55%;
 }
 
+body, html{
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to top, #D7D3C8, #F6F4EC);
+}
+
+.content{
+    overflow-y: auto;
+    margin: 16px;
+}
+.main{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 .right {
     float: right;
     width: 35%;
@@ -26,30 +90,30 @@ li, ul, p {
 }
 
 .jobs-list, .upstream-buildername,  downstream-buildernames, accordion-section {
-    box-sizing:border-box;
+    box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
 }
- 
+
 .jobs-list {
     background: linear-gradient(to bottom, #F6F4EC, #D7D3C8);
 }
- 
+
 .upstream-buildername {
     width:100%;
     padding:10px;
     display:inline-block;
     border-bottom:1px solid #333333;
-    background:#4D4E53;   
+    background:#4D4E53;
     font-size:1.1em;
     color:#D7D3C8;
     text-decoration:none;
 }
- 
+
 .upstream-buildername.active, .upstream-buildername:hover {
     background:#6A7B86;
 }
- 
+
 .downstream-buildernames {
     display:none;
     color:#4D4E53;

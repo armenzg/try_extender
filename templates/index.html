@@ -1,11 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if session.email %}
+<div class="main">
+  <div class="top_bar"> <h1>Try Extender</h1>
+    <div class="persona-container">
+    {% if session.email %}
     <a href="#" class="persona-button dark" id="signout"><span>Sign out ({{ session.email }})</span></a>
     {% else %}
     <a href="#" class="persona-button dark" id="signin"><span>Sign in</span></a>
     {% endif %}
-    <div id="introduction">
+  </div></div>
+  <div class="content">
+    <div class="introduction">
 
       {% if request.args.commit %}
       <h1> Please select below the jobs you want to add to {{request.args.commit}}: </h1>
@@ -14,8 +19,7 @@
       <p> Currently, you must do ?commit={12-character commit hash} in the URL. </br> TODO: create a better way to select a commit </p>
       {% endif %}
     </div>
-
-  <div class="left"> <div id="div1">
+  <div class="left"  id="div1">
       <script src="HTTP://code.jquery.com/jquery-1.7.1.min.js"></script>
       <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
       <script src="https://login.persona.org/include.js"></script>
@@ -70,21 +74,21 @@
 
         $.getJSON('/backend/get_json' + window.location.search, function(data) {
             if ('Message' in data){
-                var error_title = "<p> We cannot find {{request.args.commit}} in Buildapi </p>";
-                var error = "<p>Possible reasons:<p>";
+                var error = "<p> We cannot find {{request.args.commit}} in Buildapi </p>";
+                error += "<p>Possible reasons:<p>";
                 error += "<ul>";
-                error += "<li> There is a typo in the commit </li>";
+                error += "<li> There is a typo in the commit hash </li>";
                 error += "<li> The commit is not the tip of the push </li>";
                 error += "<li> The commit only includes TaskCluster jobs </li>";
                 error += "</ul>";
-                document.getElementById("introduction").innerHTML=error_title;
+                //document.getElementById("introduction").style.display = 'none';
                 document.getElementById("div1").innerHTML=error;
             }
             else{
             var output= "<form action='/backend/process_data' method='POST'>";
             output += write_builders_list(data);
             output += "<input type='hidden' name='commit' value='{{request.args.commit}}'>"
-            output += "<input type='submit' value='Trigger Jobs'>";
+            output += "<input type='submit' value='Trigger Jobs' class='button'>";
             output +="</form>";
             document.getElementById("div1").innerHTML=output;
 
@@ -108,13 +112,12 @@
             });
             }});
       </script>
-  </div> </div>
-  <div class="right">
-    <div id="div2">
+  </div>
+  <div class="right" id="div2">
 
       <p> TODO: add a general explanation about the service here</p>
 
-  </div> </div>
+  </div> </div></div>
 
 
 {% endblock %}
