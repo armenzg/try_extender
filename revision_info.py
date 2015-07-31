@@ -98,6 +98,7 @@ def jobs_per_revision(revision):
         if build_job not in processed_jobs:
             processed_jobs["new_builds"].append(build_job)
     processed_jobs["new_builds"].sort()
+
     return processed_jobs
 
 

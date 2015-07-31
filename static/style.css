@@ -20,6 +20,11 @@ h1 {
     text-align: left;
 }
 
+li, ul, p {
+    font-family: 'Open Sans', sans-serif;
+    text-align: left;
+}
+
 .jobs-list, .upstream-buildername,  downstream-buildernames, accordion-section {
     box-sizing:border-box;
     font-family: 'Open Sans', sans-serif;

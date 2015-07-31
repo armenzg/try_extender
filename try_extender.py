@@ -55,12 +55,13 @@ def get_json():
         return redirect('/')
 
     assert all(c in string.hexdigits for c in commit)
-    ret = jobs_per_revision(commit)
-
-    buildjson.BUILDS_CACHE = {}
-    query_jobs.JOBS_CACHE = {}
-
-    return jsonify(ret)
+    try:
+        ret = jobs_per_revision(commit)
+        buildjson.BUILDS_CACHE = {}
+        query_jobs.JOBS_CACHE = {}
+        return jsonify(ret)
+    except:
+        return jsonify({'Message': 'commit not found'})
 
 
 @app.route("/")
