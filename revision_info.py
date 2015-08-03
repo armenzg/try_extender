@@ -4,9 +4,9 @@ import json
 import logging
 import requests
 
-from mozci.query_jobs import BuildApi
 from mozci.sources.allthethings import list_builders
-from mozci.platforms import is_downstream, determine_upstream_builder, filter_buildernames
+from mozci.platforms import is_downstream, determine_upstream_builder, \
+    filter_buildernames
 from mozci.utils.authentication import get_credentials
 
 
@@ -15,6 +15,8 @@ logging.basicConfig(level=logging.INFO)
 
 RESULTS = ['success', 'warning', 'failure', 'skipped', 'exception', 'retry', 'cancelled',
            'pending', 'running', 'coalesced', 'unknown']
+
+TRY_URL = 'https://hg.mozilla.org/try/json-pushes?tipsonly=1'
 
 
 def generate_builders_relations_dictionary():
@@ -47,7 +49,16 @@ def get_upstream_buildernames(repo_name):
     return upstream_jobs
 
 
+def get_author(rev):
+    """Get the author of a revision."""
+    url = "%s&changeset=%s" % (TRY_URL, rev)
+    data = requests.get(url).json()
+    for push in data:
+        return data[push]['user']
+
+
 def get_jobs(rev):
+    """Get all jobs that ran in a revision."""
     url = "https://secure.pub.build.mozilla.org/buildapi/self-serve/try/rev/%s?format=json" % rev
     LOG.debug("About to fetch %s" % url)
 
@@ -64,7 +75,7 @@ def get_jobs(rev):
 
 
 def jobs_per_revision(revision):
-    """Get all jobs for a revision."""
+    """Generate a json graph of existing and possible jobs."""
     load_relations()
     all_jobs = get_jobs(revision)
 
@@ -77,18 +88,23 @@ def jobs_per_revision(revision):
 
         if is_downstream(buildername):
             build_job = determine_upstream_builder(buildername)
+
             if build_job not in processed_jobs:
                 processed_jobs[build_job] = {'existing': [], 'possible': []}
-            processed_jobs[build_job]['existing'].append(buildername)
+
+            if buildername not in processed_jobs[build_job]['existing']:
+                processed_jobs[build_job]['existing'].append(buildername)
 
         else:
             if buildername not in processed_jobs:
                 processed_jobs[buildername] = {'existing': [], 'possible': []}
 
     for build_job in processed_jobs.keys():
+
         existing_downstream = set(processed_jobs[build_job]['existing'])
         possible_downstream = sorted(list(
             set(UPSTREAM_TO_DOWNSTREAM[build_job]) - existing_downstream))
+
         processed_jobs[build_job]['possible'] = possible_downstream
         processed_jobs[build_job]['existing'].sort()
 
@@ -103,10 +119,7 @@ def jobs_per_revision(revision):
 
 
 def write_revision_graph(revision):
+    """Write the json graph to a file."""
     with open('try_graph.json', 'w') as f:
         graph = jobs_per_revision(revision)
         json.dump(graph, f, sort_keys=True, indent=4, separators=(',', ': '))
-
-
-if __name__ == '__main__':
-    write_revision_graph('b629d766f590')
