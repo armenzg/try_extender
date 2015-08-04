@@ -57,6 +57,21 @@ def get_author(rev):
         return data[push]['user']
 
 
+def get_list_of_commits(author):
+    """Get a list of commits made by a person. If author is None return most recent commits."""
+    if author is None:
+        url = TRY_URL
+    else:
+        url = "%s&user=%s" % (TRY_URL, author)
+    list_of_commits= []
+    data = requests.get(url).json()
+
+    for push in data:
+        list_of_commits.append((int(push), data[push]['changesets'][0][:12]))
+    list_of_commits = sorted(list_of_commits)[::-1]
+    return [x[1] for x in list_of_commits[:10]]
+
+
 def get_jobs(rev):
     """Get all jobs that ran in a revision."""
     url = "https://secure.pub.build.mozilla.org/buildapi/self-serve/try/rev/%s?format=json" % rev

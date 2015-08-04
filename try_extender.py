@@ -15,7 +15,7 @@ from revision_info import jobs_per_revision, get_author
 
 
 LOG = logging.getLogger()
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 # Configuring app
 app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -59,12 +59,14 @@ def process_data():
         assert buildername in list_builders()
 
     for buildername in buildernames:
+        print buildername
         trigger_job(buildername=buildername, revision=commit, dry_run=False)
 
     buildjson.BUILDS_CACHE = {}
     query_jobs.JOBS_CACHE = {}
 
-    return jsonify(request.form)
+    TH_URL = "https://treeherder.mozilla.org/#/jobs?repo=try&revision=%s" % commit
+    return redirect(TH_URL)
 
 
 @app.route("/backend/get_json")

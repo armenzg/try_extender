@@ -15,8 +15,8 @@
       {% if request.args.commit %}
       <h1> Please select below the jobs you want to add to {{request.args.commit}}: </h1>
       {% else %}
-      <h1> Please add a commit </h1>
-      <p> Currently, you must do ?commit={12-character commit hash} in the URL. </br> TODO: create a better way to select a commit </p>
+      <h1> Please add a commit: </h1>
+      <form action="/" method="GET"> <input type="text" name="commit"> <input type="submit" value="Fetch commit"> </form>
       {% endif %}
     </div>
   <div class="left"  id="div1">
