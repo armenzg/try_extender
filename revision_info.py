@@ -69,7 +69,7 @@ def get_list_of_commits(author):
     for push in data:
         list_of_commits.append((int(push), data[push]['changesets'][0][:12]))
     list_of_commits = sorted(list_of_commits)[::-1]
-    return [x[1] for x in list_of_commits[:10]]
+    return {author: [x[1] for x in list_of_commits[:10]]}
 
 
 def get_jobs(rev):

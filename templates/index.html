@@ -9,21 +9,53 @@
     <a href="#" class="persona-button dark" id="signin"><span>Sign in</span></a>
     {% endif %}
   </div></div>
+  <script src="HTTP://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="https://login.persona.org/include.js"></script>
   <div class="content">
     <div class="introduction">
 
       {% if request.args.commit %}
       <h1> Please select below the jobs you want to add to {{request.args.commit}}: </h1>
       {% else %}
+
       <h1> Please add a commit: </h1>
-      <form action="/" method="GET"> <input type="text" name="commit"> <input type="submit" value="Fetch commit"> </form>
+
+      <form action="/" method="GET">
+        <select id="recent" class="select">
+          <option value=""> Recent commits</option>
+        </select>
+
+        <input type="text" name="commit" id="text_input" class="text-box">
+        <input type="submit" value="Fetch commit" class="button">
+      </form>
+      <p>Tip: If you sign in, the drop-down menu will have  your most recent commits.</p>
+
+      <script>
+        function get_option(commit){
+            return '<option value="'+ commit + '">' + commit + '</option>';
+        }
+
+        $.getJSON('/backend/get_commits', function(data) {
+            for (author in data){
+                var commits = data[author];
+                for (var j = 0; j < commits.length; j++) {
+                    $('#recent').append(get_option(commits[j]));
+                }}
+
+            $('#recent').change(function (e) {
+                var commit = $(this).val();
+                $('#text_input').val(commit);
+            });
+
+        });
+      </script>
+
       {% endif %}
     </div>
   <div class="left"  id="div1">
-      <script src="HTTP://code.jquery.com/jquery-1.7.1.min.js"></script>
-      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-      <script src="https://login.persona.org/include.js"></script>
-      <script>
+       <script>
+
         function get_checkbox(name, pre_checked){
             if (pre_checked === true){
                 return "<label><input type='checkbox' name='" + encodeURIComponent(name) + "' value='" + encodeURIComponent(name) + "' disabled>" + name + "</label><br>";
@@ -111,6 +143,7 @@
                 e.preventDefault();
             });
             }});
+
       </script>
   </div>
   <div class="right" id="div2">

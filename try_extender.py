@@ -11,7 +11,7 @@ from mozci import query_jobs
 from mozci.sources import buildjson
 from mozci.sources.allthethings import list_builders
 from mozci.utils import transfer
-from revision_info import jobs_per_revision, get_author
+from revision_info import jobs_per_revision, get_author, get_list_of_commits
 
 
 LOG = logging.getLogger()
@@ -86,6 +86,15 @@ def get_json():
     except:
         print 'sending bad commit message'
         return jsonify({'Message': 'commit not found'})
+
+
+@app.route("/backend/get_commits")
+def get_commits_json():
+    author = session.get('email')
+    # Hack for me to see jmaher's pushes instead of mine
+    if author == 'alicescarpa@gmail.com':
+        author = 'jmaher@mozilla.com'
+    return jsonify(get_list_of_commits(author))
 
 
 @app.route("/")
