@@ -33,19 +33,18 @@ h1 {
 
 .text-box{
    width: 129px;
-   height: 30px;
+   height: 35px;
    line-height: 1;
+   box-sizing: border-box;
 }
 
-
-.select {
-   background: transparent;
+.select{
+   border: 0.4px inset #e3e3e3;
+   border-top-left-radius: 6px;
+   border-bottom-left-radius: 6px;
    width: 180px;
-   font-size: 16px;
-   line-height: 1;
-   border: 0.1;
-   height: 30px;
-   border-style: solid;
+   padding: 6px;
+   background: transparent;
 }
 
 .button {

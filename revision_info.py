@@ -85,7 +85,7 @@ def get_jobs(rev):
     data = req.json()
     jobs = []
     for build in data:
-        jobs.append((build['buildername'], build['status']))
+        jobs.append((build['buildername'], build.get('status')))
     return jobs
 
 

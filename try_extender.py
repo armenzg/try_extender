@@ -79,6 +79,7 @@ def get_json():
 
     try:
         ret = jobs_per_revision(commit)
+        print ret
         # Cleaning mozci caches
         buildjson.BUILDS_CACHE = {}
         query_jobs.JOBS_CACHE = {}
@@ -91,9 +92,9 @@ def get_json():
 @app.route("/backend/get_commits")
 def get_commits_json():
     author = session.get('email')
-    # Hack for me to see jmaher's pushes instead of mine
+    # Hack for me to see armen's pushes instead of mine
     if author == 'alicescarpa@gmail.com':
-        author = 'jmaher@mozilla.com'
+        author = 'armenzg@mozilla.com'
     return jsonify(get_list_of_commits(author))
 
 
