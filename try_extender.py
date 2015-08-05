@@ -84,6 +84,7 @@ def get_json():
         buildjson.BUILDS_CACHE = {}
         query_jobs.JOBS_CACHE = {}
         return jsonify(ret)
+
     except Exception, e:
         print e
         print '    Sending bad commit message'

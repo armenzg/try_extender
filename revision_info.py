@@ -89,6 +89,26 @@ def get_jobs(rev):
     return jobs
 
 
+def separate_downstream(jobs):
+    """Split list of jobs in downstream and upstream."""
+    upstream_jobs = []
+    downstream_jobs = []
+    for job in jobs:
+        buildername = job[0]
+        # If the job is not on allthethings.json, we will find an exception
+        try:
+            downstream_status = is_downstream(buildername)
+        except:
+            continue
+
+        if downstream_status:
+            downstream_jobs.append(job)
+        else:
+            upstream_jobs.append(job)
+
+    return sorted(upstream_jobs), sorted(downstream_jobs)
+
+
 def jobs_per_revision(revision):
     """Generate a json graph of existing and possible jobs."""
     load_relations()
@@ -97,42 +117,39 @@ def jobs_per_revision(revision):
     if all_jobs is None:
         return
 
+    upstream_jobs, downtream_jobs = separate_downstream(all_jobs)
+
     processed_jobs = {}
-    for job in all_jobs:
-        buildername = job[0]
+    processed_jobs['new_builds'] = {'existing': [], 'possible': []}
 
-        # If the job is not on allthethings.json, we might find an exception
-        try:
-            downstream_status = is_downstream(buildername)
-        except:
-            continue
-
-        if downstream_status:
-            build_job = determine_upstream_builder(buildername)
-            if build_job not in processed_jobs:
-                processed_jobs[build_job] = {'existing': [], 'possible': []}
-
-            if buildername not in processed_jobs[build_job]['existing']:
-                processed_jobs[build_job]['existing'].append(buildername)
-
+    for build_job in upstream_jobs:
+        buildername, status = build_job
+        if status == 0:
+            processed_jobs[buildername] = {'existing': [], 'possible': []}
         else:
-            if buildername not in processed_jobs:
-                processed_jobs[buildername] = {'existing': [], 'possible': []}
+            processed_jobs['new_builds']['existing'].append(buildername)
+
+    for test_job in downtream_jobs:
+        buildername = test_job[0]
+        upstream = determine_upstream_builder(buildername)
+        if upstream in processed_jobs:
+            processed_jobs[upstream]['existing'].append(buildername)
 
     for build_job in processed_jobs.keys():
+        if build_job == 'new_builds':
+            continue
+
         existing_downstream = set(processed_jobs[build_job]['existing'])
         possible_downstream = sorted(list(
             set(UPSTREAM_TO_DOWNSTREAM[build_job]) - existing_downstream))
-
         processed_jobs[build_job]['possible'] = possible_downstream
         processed_jobs[build_job]['existing'].sort()
 
-    processed_jobs["new_builds"] = []
     all_build_jobs = get_upstream_buildernames(' try ') + get_upstream_buildernames('_try_')
     for build_job in all_build_jobs:
-        if build_job not in processed_jobs:
-            processed_jobs["new_builds"].append(build_job)
-    processed_jobs["new_builds"].sort()
+        if build_job not in processed_jobs.keys() +  processed_jobs['new_builds']['existing']:
+            processed_jobs["new_builds"]['possible'].append(build_job)
+    processed_jobs["new_builds"]['possible'].sort()
 
     return processed_jobs
 

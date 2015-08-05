@@ -75,13 +75,19 @@
                     ans += "<div class='section'>";
                     ans += '<a class="upstream-buildername" href="#new_builds"> Missing Build Jobs </a>';
                     ans += "<div id='new_builds' class='downstream-buildernames'>";
-                    var new_jobs = data.new_builds;
-                    for (var k = 0; k < new_jobs.length; k++) {
-                        var new_build = new_jobs[k];
-                        ans += get_checkbox(new_build, false);
+                    var possible = data[buildername]['possible'];
+                    for (var j = 0; j < possible.length; j++) {
+                        var downstream_job = possible[j];
+                        ans += get_checkbox(downstream_job, false);
+                    }
+                    var existing = data[buildername]['existing'];
+                    for (var i = 0; i < existing.length; i++) {
+                        var downstream_job = existing[i];
+                        ans += get_checkbox(downstream_job, true);
                     }
                     ans += "</div></div>";
                 }
+
                 else{
                     ans += "<div class='section'>";
                     ans += '<a class="upstream-buildername" href="#' + count +'">' +  buildername + '</a>';
@@ -124,6 +130,7 @@
             output +="</form>";
             document.getElementById("div1").innerHTML=output;
 
+            //Sliding list of jobs
             function hide_jobs(section) {
                 $('.jobs-list ' + section).slideUp().removeClass('open');
             }
@@ -147,9 +154,11 @@
       </script>
   </div>
   <div class="right" id="div2">
-
-
-  </div> </div></div>
+    <p> Try Extender allows you to add new jobs for try pushes. </p>
+    <p> Currently you can add new test jobs for completed builds or
+      add new build jobs.</p>
+    <p>If you see a bug or have a feature suggestion, please <a href="https://github.com/adusca/try_extender/issues">file an issue.</a> </p>
+</div> </div></div>
 
 
 {% endblock %}
