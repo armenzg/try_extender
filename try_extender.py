@@ -79,13 +79,14 @@ def get_json():
 
     try:
         ret = jobs_per_revision(commit)
-        print ret
+        print '    Jobs received successfully'
         # Cleaning mozci caches
         buildjson.BUILDS_CACHE = {}
         query_jobs.JOBS_CACHE = {}
         return jsonify(ret)
-    except:
-        print 'sending bad commit message'
+    except Exception, e:
+        print e
+        print '    Sending bad commit message'
         return jsonify({'Message': 'commit not found'})
 
 

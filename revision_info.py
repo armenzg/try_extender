@@ -101,9 +101,14 @@ def jobs_per_revision(revision):
     for job in all_jobs:
         buildername = job[0]
 
-        if is_downstream(buildername):
-            build_job = determine_upstream_builder(buildername)
+        # If the job is not on allthethings.json, we might find an exception
+        try:
+            downstream_status = is_downstream(buildername)
+        except:
+            continue
 
+        if downstream_status:
+            build_job = determine_upstream_builder(buildername)
             if build_job not in processed_jobs:
                 processed_jobs[build_job] = {'existing': [], 'possible': []}
 
@@ -115,7 +120,6 @@ def jobs_per_revision(revision):
                 processed_jobs[buildername] = {'existing': [], 'possible': []}
 
     for build_job in processed_jobs.keys():
-
         existing_downstream = set(processed_jobs[build_job]['existing'])
         possible_downstream = sorted(list(
             set(UPSTREAM_TO_DOWNSTREAM[build_job]) - existing_downstream))
