@@ -74,7 +74,7 @@ def process_data():
             kwargs={'buildername': buildername,
                     'revision': commit,
                     'dry_run': False},
-            timeout=300)
+            timeout=800)
 
     TH_URL = "https://treeherder.mozilla.org/#/jobs?repo=try&revision=%s" % commit
     return redirect(TH_URL)
