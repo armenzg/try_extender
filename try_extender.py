@@ -5,6 +5,7 @@ import requests
 import urllib
 
 from flask import Flask, request, jsonify, redirect, abort, session, render_template
+from rq import Queue
 
 from mozci.mozci import trigger_job
 from mozci import query_jobs
@@ -12,10 +13,13 @@ from mozci.sources import buildjson
 from mozci.sources.allthethings import list_builders
 from mozci.utils import transfer
 from revision_info import jobs_per_revision, get_author, get_list_of_commits
+from worker import conn
 
 
 LOG = logging.getLogger()
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s:\t %(message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S')
 
 # Configuring app
 app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -26,6 +30,7 @@ transfer.MEMORY_SAVING_MODE = True
 USERS = ['alicescarpa@gmail.com']
 PORT = int(os.environ.get('PORT', 8080))
 DOMAIN = os.environ.get('HEROKU_URL', 'localhost:%d' % PORT)
+JOBS_QUEUE = Queue(connection=conn)
 
 
 # Helper functions
@@ -55,15 +60,21 @@ def process_data():
     buildernames.remove('commit')
 
     assert all(c in string.hexdigits for c in commit)
+
+    buildjson.BUILDS_CACHE = {}
+    query_jobs.JOBS_CACHE = {}
+
     for buildername in buildernames:
         assert buildername in list_builders()
 
     for buildername in buildernames:
-        print buildername
-        trigger_job(buildername=buildername, revision=commit, dry_run=False)
-
-    buildjson.BUILDS_CACHE = {}
-    query_jobs.JOBS_CACHE = {}
+        print '===>', buildername
+        JOBS_QUEUE.enqueue_call(
+            func=trigger_job,
+            kwargs={'buildername': buildername,
+                    'revision': commit,
+                    'dry_run': False},
+            timeout=300)
 
     TH_URL = "https://treeherder.mozilla.org/#/jobs?repo=try&revision=%s" % commit
     return redirect(TH_URL)
