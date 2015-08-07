@@ -133,7 +133,8 @@ def jobs_per_revision(revision):
         buildername = test_job[0]
         upstream = determine_upstream_builder(buildername)
         if upstream in processed_jobs:
-            processed_jobs[upstream]['existing'].append(buildername)
+            if buildername not in processed_jobs[upstream]['existing']:
+                processed_jobs[upstream]['existing'].append(buildername)
 
     for build_job in processed_jobs.keys():
         if build_job == 'new_builds':
@@ -147,7 +148,7 @@ def jobs_per_revision(revision):
 
     all_build_jobs = get_upstream_buildernames(' try ') + get_upstream_buildernames('_try_')
     for build_job in all_build_jobs:
-        if build_job not in processed_jobs.keys() +  processed_jobs['new_builds']['existing']:
+        if build_job not in processed_jobs.keys() + processed_jobs['new_builds']['existing']:
             processed_jobs["new_builds"]['possible'].append(build_job)
     processed_jobs["new_builds"]['possible'].sort()
 
